@@ -1,10 +1,18 @@
 import express from "express";
+import authRoute from "./routes/auth.route.js";
+import messageRoute from "./routes/message.route.js";
 
-const app = express()
+import dotenv from "dotenv";
+dotenv.config();
+
+const app = express();
+app.use(express.json());
+
 const port = "5001";
-app.get("/", (req, res) => {
-    res.send("hello world!")
-})
+
+app.use("/api/auth", authRoute);
+app.use("/api/messages", messageRoute);
+
 
 app.listen(5001, () => {
     console.log(`server is now running on port ${port}`);
