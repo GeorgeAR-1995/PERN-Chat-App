@@ -1,44 +1,59 @@
 import { Request, Response } from "express";
 import prisma from "../db/prisma.js";
-import bcryptjs from "bcryptjs";
+import bcryptjs, { hash } from "bcryptjs";
+import { Gender } from "@prisma/client"; // Importing Prisma client types
 import generateToken from "../utils/generateToken.js";
 
+interface SignupRequestBody {
+    fullName: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+    //this gender type is imported from prisma as it is not a string but an enum
+    gender: Gender;
+}
+
 export const signup = async (req: Request, res: Response) => {
+
     try {
-        const { fullName, username, password, confirmPassword, gender } = req.body
+        const { fullName, username, password, confirmPassword, gender } = req.body as SignupRequestBody;
 
         if (!fullName || !username || !password || !confirmPassword || !gender) {
-            return res.status(400).json({ error: "Please make sure to fill out all fields." });
+            res.status(400).json({ error: "Please fill out all fields." })
+            return;
         }
-        
+
         if (password !== confirmPassword) {
-            return res.status(400).json({ error: "Passwords don't match." });
+            res.status(400).json({ error: "Please ensure passwords match." })
+            return;
         }
 
         const user = await prisma.user.findUnique({ where: { username } });
-        
+
         if (user) {
-            return res.status(400).json({ error: "Username already taken." })
+            res.status(400).json({ error: "Username already in use, please choose another." })
+            return;
         }
 
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
 
-        //https://avatar-placeholder.iran.liara.run/document
-        const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
-        const newUser = await prisma.user.create({ 
+        //profile pics from https://avatar-placeholder.iran.liara.run/document
+        const maleProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`
+        const femaleProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`
+
+        const newUser = await prisma.user.create({
             data: {
                 fullName,
                 username,
                 password: hashedPassword,
                 gender,
-                profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+                profilePic: gender === "male" ? maleProfilePic : femaleProfilePic,
             }
-         });
+        });
 
-         if (newUser) {
+        if (newUser) {
             generateToken(newUser.id, res)
 
             res.status(201).json({
@@ -47,16 +62,15 @@ export const signup = async (req: Request, res: Response) => {
                 username: newUser.username,
                 profilePic: newUser.profilePic,
             })
-         } else {
+        } else {
             res.status(400).json({ error: "Invalid user data." });
-         }
+        }
 
-    } catch (error: any) {
-        console.log("Error in signup controller", error.message);
-        res.status(500).json({ error: "Internal Server Error." })
+    } catch (error) {
+        console.error("Error in signup:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 };
-
 
 
 export const login = async (req: Request, res: Response) => {}
