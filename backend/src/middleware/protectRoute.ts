@@ -2,6 +2,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import prisma from "../db/prisma.js";
 import { Request, Response, NextFunction } from "express";
 
+//this function ensures the route is protected i.e. the token has been verified before any action can be done
+
 interface DecodedToken extends JwtPayload {
     userId: string;
 }
