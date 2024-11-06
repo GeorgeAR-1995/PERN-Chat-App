@@ -111,4 +111,4 @@ export const getUsersForSidebar = async (req: Request, res: Response) => {
     } catch (error: any) {
         
     }
-}
+};
