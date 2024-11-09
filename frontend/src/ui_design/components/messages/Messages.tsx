@@ -1,15 +1,15 @@
-import React from 'react'
-import Message from './Message'
+import React from 'react';
+import Message from './Message';
+import { DUMMY_MESSAGES } from '../../../dummy_data/dummy';
 
 function Messages() {
   return (
     <div className='px-4 flex-1 overflow-auto'>
-        <Message />
-        <Message />
-        <Message />
-        <Message />
+      {DUMMY_MESSAGES.map((message) => (
+        <Message key={message.id} message={message} />
+      ))}
     </div>
   )
 };
 
-export default Messages
+export default Messages;

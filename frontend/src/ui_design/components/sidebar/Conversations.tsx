@@ -1,15 +1,15 @@
 import React from 'react'
 import Conversation from './Conversation';
+import { DUMMY_CONVERSATIONS } from '../../../dummy_data/dummy';
 
 function Conversations() {
   return (
     <div className='py-2 flex flex-col overflow-auto'>
-        <Conversation />
-        <Conversation />
-        <Conversation />
-        <Conversation />
-        <Conversation />
-        <Conversation />
+      {DUMMY_CONVERSATIONS.map((conversation) => {
+        return(
+        <Conversation key={conversation.id} conversation={conversation} />
+        );
+      })}
     </div>
   )
 }
