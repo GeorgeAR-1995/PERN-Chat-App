@@ -7,7 +7,7 @@ function Conversations() {
     <div className='py-2 flex flex-col overflow-auto'>
       {DUMMY_CONVERSATIONS.map((conversation) => {
         return(
-        <Conversation key={conversation.id} conversation={conversation} />
+        <Conversation key={conversation.id} conversation={conversation} emoji={''} />
         );
       })}
     </div>

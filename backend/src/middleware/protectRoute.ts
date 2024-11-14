@@ -34,7 +34,8 @@ const protectRoute = async (req: Request, res: Response, next: NextFunction) => 
             return;
         }
 
-        const user = await prisma.user.findUnique({ where: { id: decoded.userId }, select: { id: true, username: true, fullName: true, profilePic: true} });
+        const user = await prisma.user.findUnique({ where: { id: decoded.userId }, 
+            select: { id: true, username: true, fullName: true, profilePic: true} });
 
         if (!user) {
             res.status(404).json({ error: "User not found." });
@@ -42,7 +43,7 @@ const protectRoute = async (req: Request, res: Response, next: NextFunction) => 
 
         req.user = user //in order to get this to work you can either do req.user = user! or in tsconfig set strictNullChecks=false
 
-        next()
+        next();
 
     } catch (error: any) {
         console.log("Error in protectRoute middleware", error.message);

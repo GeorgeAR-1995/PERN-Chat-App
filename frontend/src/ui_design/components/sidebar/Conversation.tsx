@@ -1,39 +1,37 @@
-import React from 'react';
+import { useSocketContext } from "../../../context/SocketContext";
+import useConversation, { ConversationType } from "../../../zustand/useConversation";
 
-interface ConversationProps {
-  conversation: {
-    id: number;
-    fullName: string;
-    profilePic: string;
-    emoji: string;
-  };
-}
+const Conversation = ({ conversation, emoji }: { conversation: ConversationType; emoji: string }) => {
+	const { setSelectedConversation, selectedConversation } = useConversation();
+	const isSelected = selectedConversation?.id === conversation.id;
 
-const Conversation: React.FC<ConversationProps> = ({ conversation }) => {
-  return (
-    <div>
-      <div className='flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer'>
-        <div className='avatar online placeholder'>
-          <div className="text-center bg-neutral text-neutral-content w-16 h-16 rounded-full">
-            {conversation.profilePic ? (
-              <img src={conversation.profilePic} alt={conversation.fullName} />
-            ) : (
-              <span className="text-xl">Anon</span>  /* Fallback if no image */
-            )}
-          </div>
-        </div>
+	const { onlineUsers } = useSocketContext();
 
-        <div className='flex flex-col flex-1'>
-          <div className='flex gap-3 justify-between items-center'>
-            <p className='font-bold text-gray-200 p-1'>{conversation.fullName}</p>
-            <span className='text-xl'>{conversation.emoji}</span>
-          </div>
-        </div>
-      </div>
+	const isOnline = onlineUsers.includes(conversation.id);
 
-      <div className='divider my-0 py-0 h-1'></div>
-    </div>
-  );
+	return (
+		<>
+			<div
+				className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2
+				 py-1 cursor-pointer ${isSelected ? "bg-sky-500" : ""}`}
+				onClick={() => setSelectedConversation(conversation)}
+			>
+				<div className={`avatar ${isOnline ? "online" : ""}`}>
+					<div className='w-8 md:w-12 rounded-full'>
+						<img src={conversation.profilePic} alt='user avatar' />
+					</div>
+				</div>
+
+				<div className='flex flex-col flex-1'>
+					<div className='flex gap-3 justify-between'>
+						<p className='font-bold text-gray-200 text-sm md:text-md'>{conversation.fullName}</p>
+						<span className='text-xl hidden md:inline-block'>{emoji}</span>
+					</div>
+				</div>
+			</div>
+
+			<div className='divider my-0 py-0 h-1' />
+		</>
+	);
 };
-
 export default Conversation;

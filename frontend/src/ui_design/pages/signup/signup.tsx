@@ -10,10 +10,10 @@ const SignUp = () => {
         username: "",
         password: "",
         confirmPassword: "",
-        gender: "",// default value
+        gender: "",
     });
 
-    const { signUp } = useSignup();
+    const { loading, signUp } = useSignup();
 
     const handleRadioChange = (gender: "male" | "female") => {
         setInputs({...inputs, gender })
@@ -21,10 +21,9 @@ const SignUp = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("HEKLPNDFJK")
-        console.log('INPUT', inputs)
+        console.log(inputs)
         signUp(inputs)
-    }
+    };
 
   return (
     <div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
@@ -74,14 +73,16 @@ const SignUp = () => {
                     />
                 </div>
 
-                <GenderCheckbox onRadioChange={handleRadioChange} selectedGender={inputs.gender} />
+                <GenderCheckbox selectedGender={inputs.gender} onRadioChange={handleRadioChange} />
 
                 <Link to='/login' className='label-text text-sm hover:underline hover:text-blue-600 mt-2 inline-block'>
                     Already have an account?
                 </Link>
 
                 <div>
-                    <button className='btn btn-block btn-sm mt-2'>Sign Up</button>
+                    <button className='btn btn-block btn-sm mt-2' disabled={loading}>
+                        { loading ? "Loading..." : "Sign Up" }
+                    </button>
                 </div>
 
             </form>

@@ -1,11 +1,8 @@
 import React from 'react'
 
-interface GenderCheckboxProps {
-  onRadioChange: (gender: "male" | "female") => void;
-  selectedGender: string;
-};
 
-const GenderCheckbox: React.FC<GenderCheckboxProps> = ({onRadioChange, selectedGender}) => {
+const GenderCheckbox = ({ selectedGender, onRadioChange } : 
+  { selectedGender: string; onRadioChange: (gender: "male" | "female") => void; }) => {
     return (
       <div className='flex'>
         <div className='form-control'>
