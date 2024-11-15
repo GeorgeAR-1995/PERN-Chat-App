@@ -10,6 +10,7 @@ import cors from 'cors';
 
 import dotenv from "dotenv";
 import { server } from "./socket/socket.js";
+
 dotenv.config();
 
 const app = express();
@@ -46,7 +47,7 @@ io.on("connection", (socket) => {
 });
 
 app.listen(port, () => {
-    console.log(`server is now running on port ${port}`);
+    console.log(`server is now running on port ${port}.`);
 });
 
 //to dos: Add socket.io to the server

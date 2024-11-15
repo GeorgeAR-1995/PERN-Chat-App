@@ -1,29 +1,31 @@
-import React from 'react';
+import { useAuthContext } from '../../../context/AuthContext';
+import { extractTime } from '../../../utils/extractTime';
+import useConversation, { MessageType } from '../../../zustand/useConversation';
 
-interface MessageProps {
-  message: {
-    id: number;
-    fromMe: boolean;
-    body: string;
-  };
-}
+const Message = ({ message }: { message: MessageType }) => {
+  const { authUser } = useAuthContext();
+  const { selectedConversation } = useConversation();
 
-const Message: React.FC<MessageProps> = ({ message }) => {
+  const fromMe = message?.senderId === authUser?.id;
+  const img = fromMe ? authUser?.profilePic : selectedConversation?.profilePic;
+  const chatClass = fromMe ? "chat-end" : "chat-start";
+
+  const bubbleBg = fromMe ? "bg-blue-500" : "";
   return (
-    <div className={message.fromMe ? 'chat chat-end' : 'chat chat-start'}>
-      <div className='chat-image avatar'>
-        <div className='w-10 rounded-full'>
+    <div className={`chat ${chatClass}`}>
+      <div className='hidden md:block chat-image avatar'>
+        <div className='w-6 md:w-8 rounded-full'>
           <img
             alt="User avatar"
-            src={"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+            src={img}
           />            
         </div>
       </div>
 
-      <div className={'chat-bubble text-white bg-blue-500'}>
+      <div className={`chat-bubble text-white ${bubbleBg} text-sm md:text-md`}>
         {message.body}
       </div>
-      <div className={'chat-footer opacity-50 text-xs flex gap-1 items-center'}></div>
+      <div className='chat-footer opacity-50 text-xs flex gap-1 items-center text-white'>{extractTime(message.createdAt)}</div>
     </div>
   );
 }
