@@ -1,6 +1,3 @@
-import React from 'react'
-
-
 const GenderCheckbox = ({ selectedGender, onRadioChange } : 
   { selectedGender: string; onRadioChange: (gender: "male" | "female") => void; }) => {
     return (

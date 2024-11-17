@@ -7,11 +7,16 @@ import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
 import cors from 'cors';
 
+import path from "path";
+
 
 import dotenv from "dotenv";
 import { app, server } from "./socket/socket.js";
 
 dotenv.config();
+
+const port = process.env.PORT || 5001; 
+const __dirname = path.resolve();
 
 // Enable CORS for requests from the frontend
 app.use(cors({ 
@@ -22,10 +27,16 @@ app.use(cors({
 app.use(cookieParser()); //cookie parser
 app.use(express.json()); //application/json parser
 
-const port = process.env.PORT || 5001; 
 
 app.use("/api/auth", authRoute);
 app.use("/api/messages", messageRoute);
+
+if(process.env.NODE_ENV !== "development") {
+    app.use(express.static(path.join(__dirname, "/frontend/dist")));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+    });
+};
 
 // Initialize Socket.IO server
 const io = new Server(server, {
