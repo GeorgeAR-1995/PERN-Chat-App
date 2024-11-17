@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import useConversation from '../zustand/useConversation';
-import Conversation from '../ui_design/components/sidebar/Conversation';
 import toast from 'react-hot-toast';
 
 function useGetMessages() {

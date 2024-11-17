@@ -9,11 +9,9 @@ import cors from 'cors';
 
 
 import dotenv from "dotenv";
-import { server } from "./socket/socket.js";
+import { app, server } from "./socket/socket.js";
 
 dotenv.config();
-
-const app = express();
 
 // Enable CORS for requests from the frontend
 app.use(cors({ 
@@ -46,11 +44,9 @@ io.on("connection", (socket) => {
     });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`server is now running on port ${port}.`);
 });
 
-//to dos: Add socket.io to the server
-//configure server for deployment
 
 

@@ -5,7 +5,7 @@ import io, { Socket } from "socket.io-client";
 interface ISocketContext {
 	socket: Socket | null;
 	onlineUsers: string[];
-}
+};
 
 const SocketContext = createContext<ISocketContext | undefined>(undefined);
 
@@ -51,7 +51,10 @@ const SocketContextProvider = ({ children }: { children: ReactNode }) => {
 	}, [authUser, isLoading]);
 
 	return (
-		<SocketContext.Provider value={{ socket: socketRef.current, onlineUsers }}>{children}</SocketContext.Provider>
+		<SocketContext.Provider 
+			value={{ socket: socketRef.current, onlineUsers }}>
+				{children}
+		</SocketContext.Provider>
 	);
 };
 
