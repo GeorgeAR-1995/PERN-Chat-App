@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../db/prisma.js";
 import bcryptjs, { hash } from "bcryptjs";
-import { Gender } from "@prisma/client"; // Importing Prisma client types
 import generateToken from "../utils/generateToken.js";
 
 interface SignupRequestBody {
@@ -10,7 +9,7 @@ interface SignupRequestBody {
     password: string;
     confirmPassword: string;
     //this gender type is imported from prisma as it is not a string but an enum
-    gender: Gender;
+    gender: string;
 }
 
 export const signup = async (req: Request, res: Response) => {
@@ -137,6 +136,6 @@ export const getMe = async (req: Request, res: Response) => {
         console.log("Error in getMe controller", error.message);
         res.status(500).json({ error: "Internal server error."})
     }
-}
+};
 
 

@@ -38,23 +38,6 @@ if(process.env.NODE_ENV !== "development") {
     });
 };
 
-// Initialize Socket.IO server
-const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"],
-        credentials: true
-    }
-});
-
-io.on("connection", (socket) => {
-    console.log("New client connected:", socket.id);
-
-    socket.on("disconnect", () => {
-        console.log("Client disconnected:", socket.id);
-    });
-});
-
 server.listen(port, () => {
     console.log(`server is now running on port ${port}.`);
 });

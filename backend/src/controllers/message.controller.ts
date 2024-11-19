@@ -47,8 +47,8 @@ export const sendMessage = async (req: Request, res: Response) => {
                         }
                     }
                 }
-            })
-        };
+            });
+        }
 
         //socket io implementation for real time
         const receiverSocketId = getReceiverSocketId(receiverId);
