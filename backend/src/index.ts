@@ -4,7 +4,6 @@ import messageRoute from "./routes/message.route.js";
 
 import cookieParser from "cookie-parser";
 
-import { Server } from "socket.io";
 import cors from 'cors';
 
 import path from "path";
